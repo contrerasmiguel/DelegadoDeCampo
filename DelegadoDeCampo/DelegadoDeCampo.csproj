@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1EB93AD2-ECBC-4D27-B8F5-4BACBEB37574}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DelegadoDeCampo</RootNamespace>
+    <AssemblyName>DelegadoDeCampo</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <AndroidApplication>true</AndroidApplication>
+    <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
+    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
+    <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
+    <AndroidLinkMode>None</AndroidLinkMode>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
+    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Mono.Android" />
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MainActivity.cs" />
+    <Compile Include="Modelo\ComunicacionRemota\Conexion.cs" />
+    <Compile Include="Modelo\ComunicacionRemota\EnvioSolicitud.cs" />
+    <Compile Include="Modelo\GestionOcurrencias\AnulacionOcurrencias.cs" />
+    <Compile Include="Modelo\GestionOcurrencias\ReporteFinalizacionPartido.cs" />
+    <Compile Include="Modelo\GestionOcurrencias\ReporteGol.cs" />
+    <Compile Include="Modelo\GestionOcurrencias\ReporteInicioPartido.cs" />
+    <Compile Include="Modelo\GestionOcurrencias\ReporteOcurrencia.cs" />
+    <Compile Include="Modelo\GestionOcurrencias\ReporteResultadosFinales.cs" />
+    <Compile Include="Modelo\GestionOcurrencias\ReporteResultadosParciales.cs" />
+    <Compile Include="Modelo\GestionOcurrencias\ReporteTarjetaAmarilla.cs" />
+    <Compile Include="Modelo\GestionOcurrencias\ReporteTarjetaRoja.cs" />
+    <Compile Include="Modelo\GestionOcurrencias\SeleccionTiempo.cs" />
+    <Compile Include="Modelo\GestiónEstadoPartido\Equipo.cs" />
+    <Compile Include="Modelo\GestiónEstadoPartido\EquiposPartido.cs" />
+    <Compile Include="Modelo\GestiónEstadoPartido\EstadoPartido.cs" />
+    <Compile Include="Modelo\GestiónEstadoPartido\Jugador.cs" />
+    <Compile Include="Modelo\GestiónEstadoPartido\Gol.cs" />
+    <Compile Include="Modelo\GestiónEstadoPartido\Tarjeta.cs" />
+    <Compile Include="Modelo\GestiónEstadoPartido\TarjetaAmarilla.cs" />
+    <Compile Include="Modelo\GestiónEstadoPartido\TarjetaRoja.cs" />
+    <Compile Include="Modelo\GestionSesionUsuario\SesionUsuario.cs" />
+    <Compile Include="Modelo\GestionSesionUsuario\Usuario.cs" />
+    <Compile Include="Resources\Resource.Designer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GettingStarted.Xamarin" />
+    <None Include="Resources\AboutResources.txt" />
+    <None Include="Assets\AboutAssets.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\Main.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\Strings.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\AndroidManifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Presentacion\IuCierreSesion\" />
+    <Folder Include="Presentacion\IuEstadoPartido\" />
+    <Folder Include="Presentacion\IuInicioPartido\" />
+    <Folder Include="Presentacion\IuInicioSesion\" />
+    <Folder Include="Presentacion\IuMenuPrincipal\" />
+    <Folder Include="Presentacion\IuSeleccionJugador\" />
+    <Folder Include="Presentacion\IuSeleccionOcurrencias\" />
+    <Folder Include="Presentacion\IuSeleccionTiempo\" />
+    <Folder Include="Procesos\ControladorEstadoPartido\" />
+    <Folder Include="Procesos\ControladorOcurrencias\" />
+    <Folder Include="Procesos\ControladorSesionUsuario\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+     Other similar extension points exist, see Microsoft.Common.targets.
+		<Target Name="BeforeBuild">
+		</Target>
+		<Target Name="AfterBuild">
+		</Target>
+ -->
+</Project>
