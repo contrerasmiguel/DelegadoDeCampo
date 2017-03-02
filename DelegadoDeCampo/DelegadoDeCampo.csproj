@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
     <Compile Include="Modelo\ComunicacionRemota\Conexion.cs" />
+    <Compile Include="Modelo\GestionEstadoPartido\EstadoPartido.cs" />
     <Compile Include="Modelo\GestionEstadoPartido\FinalPartido.cs" />
     <Compile Include="Modelo\GestionEstadoPartido\Gol.cs" />
     <Compile Include="Modelo\GestionEstadoPartido\InicioPartido.cs" />

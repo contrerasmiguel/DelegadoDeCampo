@@ -12,21 +12,21 @@ using Android.Widget;
 
 namespace DelegadoDeCampo.Modelo.GestionEstadoPartido
 {
-    class TarjetaRoja : Ocurrencia
+    class EstadoPartido
     {
-        private Jugador jugador;
+        private List<Ocurrencia> ocurrencias;
 
-        internal Jugador Jugador
+        internal List<Ocurrencia> Ocurrencias
         {
             get
             {
-                return jugador;
+                return ocurrencias;
             }
+        }
 
-            set
-            {
-                jugador = value;
-            }
+        public EstadoPartido()
+        {
+            ocurrencias = new List<Ocurrencia>();
         }
     }
 }

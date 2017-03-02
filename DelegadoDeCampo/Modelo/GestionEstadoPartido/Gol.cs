@@ -15,5 +15,18 @@ namespace DelegadoDeCampo.Modelo.GestionEstadoPartido
     class Gol : Ocurrencia
     {
         private Jugador jugador;
+
+        internal Jugador Jugador
+        {
+            get
+            {
+                return jugador;
+            }
+
+            set
+            {
+                jugador = value;
+            }
+        }
     }
 }

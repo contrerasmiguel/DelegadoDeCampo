@@ -15,5 +15,18 @@ namespace DelegadoDeCampo.Modelo.GestionEstadoPartido
     class TarjetaAmarilla : Ocurrencia
     {
         private Jugador jugador;
+
+        internal Jugador Jugador
+        {
+            get
+            {
+                return jugador;
+            }
+
+            set
+            {
+                jugador = value;
+            }
+        }
     }
 }
