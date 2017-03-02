@@ -50,28 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
-    <Compile Include="Modelo\ComunicacionRemota\Conexion.cs" />
-    <Compile Include="Modelo\ComunicacionRemota\EnvioSolicitud.cs" />
-    <Compile Include="Modelo\GestionOcurrencias\AnulacionOcurrencias.cs" />
-    <Compile Include="Modelo\GestionOcurrencias\ReporteFinalizacionPartido.cs" />
-    <Compile Include="Modelo\GestionOcurrencias\ReporteGol.cs" />
-    <Compile Include="Modelo\GestionOcurrencias\ReporteInicioPartido.cs" />
-    <Compile Include="Modelo\GestionOcurrencias\ReporteOcurrencia.cs" />
-    <Compile Include="Modelo\GestionOcurrencias\ReporteResultadosFinales.cs" />
-    <Compile Include="Modelo\GestionOcurrencias\ReporteResultadosParciales.cs" />
-    <Compile Include="Modelo\GestionOcurrencias\ReporteTarjetaAmarilla.cs" />
-    <Compile Include="Modelo\GestionOcurrencias\ReporteTarjetaRoja.cs" />
-    <Compile Include="Modelo\GestionOcurrencias\SeleccionTiempo.cs" />
-    <Compile Include="Modelo\GestiónEstadoPartido\Equipo.cs" />
-    <Compile Include="Modelo\GestiónEstadoPartido\EquiposPartido.cs" />
-    <Compile Include="Modelo\GestiónEstadoPartido\EstadoPartido.cs" />
-    <Compile Include="Modelo\GestiónEstadoPartido\Jugador.cs" />
-    <Compile Include="Modelo\GestiónEstadoPartido\Gol.cs" />
-    <Compile Include="Modelo\GestiónEstadoPartido\Tarjeta.cs" />
-    <Compile Include="Modelo\GestiónEstadoPartido\TarjetaAmarilla.cs" />
-    <Compile Include="Modelo\GestiónEstadoPartido\TarjetaRoja.cs" />
-    <Compile Include="Modelo\GestionSesionUsuario\SesionUsuario.cs" />
-    <Compile Include="Modelo\GestionSesionUsuario\Usuario.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -79,6 +57,21 @@
     <None Include="GettingStarted.Xamarin" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
+    <AndroidResource Include="Resources\layout\IuInicioSesion.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\IuInicioPartido.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\IuMenuPrincipal.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\IuSeleccionJugador.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\IuSeleccionTiempo.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\Main.axml">
@@ -95,13 +88,16 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Modelo\ComunicacionRemota\" />
+    <Folder Include="Modelo\GestionOcurrencias\" />
+    <Folder Include="Modelo\GestionSesionUsuario\" />
+    <Folder Include="Modelo\GestiónEstadoPartido\" />
     <Folder Include="Presentacion\IuCierreSesion\" />
     <Folder Include="Presentacion\IuEstadoPartido\" />
     <Folder Include="Presentacion\IuInicioPartido\" />
     <Folder Include="Presentacion\IuInicioSesion\" />
     <Folder Include="Presentacion\IuMenuPrincipal\" />
     <Folder Include="Presentacion\IuSeleccionJugador\" />
-    <Folder Include="Presentacion\IuSeleccionOcurrencias\" />
     <Folder Include="Presentacion\IuSeleccionTiempo\" />
     <Folder Include="Procesos\ControladorEstadoPartido\" />
     <Folder Include="Procesos\ControladorOcurrencias\" />
