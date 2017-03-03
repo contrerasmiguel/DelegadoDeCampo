@@ -17,6 +17,14 @@ namespace DelegadoDeCampo.Modelo.GestionEstadoPartido
     {
         private Equipo[] equipos;
 
+        public Equipo[] Equipos
+        {
+            get
+            {
+                return equipos;
+            }
+        }
+
         public DatosPartido(Conexion c)
         {
             CargarDatosPartido(c);
@@ -44,6 +52,7 @@ namespace DelegadoDeCampo.Modelo.GestionEstadoPartido
             };
 
             jugadoresVenezuela.ForEach(j => j.Equipo = equipos[0]);
+            jugadoresVenezuela.ForEach(j => equipos[0].Jugadores.Add(j));
 
             List<Jugador> jugadoresColombia = new List<Jugador>()
             {
@@ -60,6 +69,7 @@ namespace DelegadoDeCampo.Modelo.GestionEstadoPartido
             };
 
             jugadoresColombia.ForEach(j => j.Equipo = equipos[1]);
+            jugadoresColombia.ForEach(j => equipos[1].Jugadores.Add(j));
 
         }
     }
