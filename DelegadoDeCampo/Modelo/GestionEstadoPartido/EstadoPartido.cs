@@ -10,7 +10,6 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 
-using Mono.Data.Sqlite;
 using System.Data;
 using System.IO;
 
@@ -178,10 +177,25 @@ namespace DelegadoDeCampo.Modelo.GestionEstadoPartido
             }
         }
 
-        public EstadoPartido(Application app)
+        string directorioBD;
+        string strConexión;
+
+        public EstadoPartido()
+        {
+            var docsFolder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
+            directorioBD = System.IO.Path.Combine(docsFolder, "db_adonet.db");
+            strConexión = string.Format("Data Source={0};Version=3;", directorioBD);
+        }
+
+        /*public EstadoPartido(Application app)
         {
             this.app = app;
             CargarDatos(app);
+        }*/
+
+        public void CerrarSesion()
+        {
+            
         }
 
         public static void Inicializar(Application app)

@@ -15,7 +15,7 @@ namespace DelegadoDeCampo.Modelo.GestionEstadoPartido
     class Equipo
     {
         private string nombre;
-        private List<Jugador> jugadores;
+        private List<Jugadores> jugadores;
 
         public string Nombre
         {
@@ -25,7 +25,7 @@ namespace DelegadoDeCampo.Modelo.GestionEstadoPartido
             }
         }
 
-        public List<Jugador> Jugadores
+        public List<Jugadores> Jugadores
         {
             get
             {
@@ -36,7 +36,7 @@ namespace DelegadoDeCampo.Modelo.GestionEstadoPartido
         public Equipo(string n)
         {
             nombre = n;
-            jugadores = new List<Jugador>();
+            jugadores = new List<Jugadores>();
         }
     }
 }

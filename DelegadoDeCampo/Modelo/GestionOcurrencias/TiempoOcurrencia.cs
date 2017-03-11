@@ -10,10 +10,16 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 
+using SQLite;
+using DelegadoDeCampo.Modelo.Tablas;
+
 namespace DelegadoDeCampo.Modelo.GestionOcurrencias
 {
     class TiempoOcurrencia
     {
+        string directorioBD;
+        string strConexión;
+
         public static int MINIMO = 0;
         public static int MAXIMO_DECENA = 12;
         public static int MAXIMO_UNIDAD = 9;
@@ -59,6 +65,38 @@ namespace DelegadoDeCampo.Modelo.GestionOcurrencias
                     minutoUnidad = value;
                 }
             }
+        }
+
+        public TiempoOcurrencia()
+        {
+            var docsFolder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
+            directorioBD = System.IO.Path.Combine(docsFolder, "db_adonet.db");
+            strConexión = string.Format("Data Source={0};Version=3;", directorioBD);
+        }
+
+        public bool AlmacenarTiempoJugador(int tiempo)
+        {
+            try
+            {
+                using (var db = new SQLiteConnection(directorioBD))
+                {
+                    // Luego, con id, se accesa a la tabla Partidos y se cambia el campo 'ComienzoPartido' a verdadero
+                    var resultado1 = db.Table<TablaOcurrencias>();
+                    IEnumerable<TablaOcurrencias> tabla_ocu = resultado1.ToList<TablaOcurrencias>();
+                    List<TablaOcurrencias> ocu = tabla_ocu.ToList<TablaOcurrencias>();
+
+                    // Se almacena el minuto de la ocurrencia en el campo 'MinutoOcu' de la última tupla
+                    ocu[(ocu.Count() - 1)].MinutoOcu = tiempo;
+
+                    db.Update(ocu[(ocu.Count() - 1)]);
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return false;
         }
     }
 }

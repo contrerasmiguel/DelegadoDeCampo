@@ -3,37 +3,79 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="20dip"
-    android:background="@android:color/holo_blue_dark"
-    android:gravity="center_vertical"
-    android:isScrollContainer="true">
-    <TextView
-        android:text="Seleccione el jugador que originó la ocurrencia:"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtSeleccionJugador"
-        android:gravity="center"
-        android:textSize="15dip"
-        android:layout_gravity="center_horizontal" />
-    <ListView
-        android:minWidth="25px"
-        android:minHeight="25px"
-        android:layout_height="200dp"
-        android:id="@+id/lvJugadores"
-        android:isScrollContainer="true"
-        android:clickable="true"
-        android:background="@android:color/background_dark"
-        android:layout_marginTop="30dp"
-        android:layout_width="match_parent" />
-    <Button
-        android:id="@+id/btnAtras"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="Volver"
-        android:layout_gravity="center_horizontal"
-        android:background="@android:color/holo_blue_light"
-        android:paddingLeft="15dip"
-        android:paddingRight="15dip"
-        android:layout_marginTop="25dp" />
+    android:background="#000000" >
+  <LinearLayout
+      android:orientation="vertical"
+      android:layout_width="fill_parent"
+      android:layout_height="60dip"
+      android:background="@drawable/encabezado"
+      android:gravity="center"
+      android:layout_gravity="center_vertical">
+      <GridLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:id="@+id/glCerrarSesionEstadoPartido"
+          android:rowCount="1"
+          android:columnCount="2"
+          android:orientation="horizontal">
+        <Button
+            android:text="CERRAR SESIÓN"
+            android:id="@+id/btnCerrarSesion"
+            android:layout_column="0"
+            android:layout_row="0"
+            android:background="@drawable/boton_azul"
+            android:layout_gravity="fill"
+            android:gravity="center"
+            style="@style/texto_boton" />
+        <TextView
+            android:text="Listado de Jugadores"
+            android:layout_column="1"
+            android:layout_row="0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtListadoJugadores"
+            android:gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="fill_vertical"
+            android:textSize="17dip"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+      </GridLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/fondo"
+        android:paddingLeft="20dip"
+        android:paddingRight="20dip">
+        <TextView
+            android:text="Seleccione el jugador que originó la ocurrencia:"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtSeleccionJugador"
+            android:gravity="center"
+            android:textSize="15dip"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dip" />
+        <ListView
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_height="200dp"
+            android:id="@+id/lvJugadores"
+            android:isScrollContainer="true"
+            android:clickable="true"
+            android:background="@android:color/background_dark"
+            android:layout_marginTop="30dp"
+            android:layout_width="match_parent" />
+        <Button
+            android:id="@+id/btnAtras"
+            android:layout_height="wrap_content"
+            android:layout_width="100dip"
+            android:text="VOLVER"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/boton_azul"
+            android:layout_marginTop="25dp"
+            style="@style/texto_boton" />
+    </LinearLayout>
 </LinearLayout>
