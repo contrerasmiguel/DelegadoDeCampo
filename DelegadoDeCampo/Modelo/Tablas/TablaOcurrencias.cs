@@ -25,5 +25,7 @@ namespace DelegadoDeCampo.Modelo.Tablas
         [MaxLength(25)]
         public string NombreEquiJug { get; set; }
         public int MinutoOcu { get; set; }
+
+        public int idPartido { get; set; }
     }
 }

@@ -23,19 +23,25 @@ namespace DelegadoDeCampo.Modelo.GestionSesionUsuario
 {
     class SesionUsuario
     {
-        private bool sesionIniciada;
-
         string directorioBD;
         string strConexión;
 
-        public bool SesionIniciada
+        static SesionUsuario instancia = null;
+
+        public static SesionUsuario Instancia
         {
             get
             {
-                return sesionIniciada;
+                if (instancia == null)
+                {
+                    instancia = new SesionUsuario();
+                }
+
+                return instancia;
             }
         }
-        public SesionUsuario()
+
+        private SesionUsuario()
         {
             var docsFolder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
             directorioBD = System.IO.Path.Combine(docsFolder, "db_adonet.db");
@@ -346,16 +352,120 @@ namespace DelegadoDeCampo.Modelo.GestionSesionUsuario
             if (Existe(nombreUsuario, clave))
                 return true;
             return false;
-            /*if (nombreUsuario == "prueba" && clave == "prueba")
+        }
+
+        public string CerrarSesion()
+        {
+            // Se obtiene, primeramente, el nombre de usuario del delegado conectado que está asignado al partido
+            string nombreUsuario = string.Empty;
+            try
             {
-                sesionIniciada = true;
-                return true;
+                using (var db = new SQLiteConnection(directorioBD))
+                {
+                    var resultado = db.Table<TablaDelegadoConectado>();
+                    IEnumerable<TablaDelegadoConectado> tabla_delCo = resultado.ToList<TablaDelegadoConectado>();
+                    List<TablaDelegadoConectado> delCo = tabla_delCo.ToList<TablaDelegadoConectado>();
+
+                    nombreUsuario = delCo[0].Username;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                sesionIniciada = false;
-                return false;
-            }*/
+                Console.WriteLine(ex.Message);
+            }
+
+            string mensaje = string.Empty;
+            try
+            {
+                using (var db = new SQLiteConnection(directorioBD))
+                {
+
+                    var resultado = db.Table<TablaDelegados>();
+                    IEnumerable<TablaDelegados> tabla_del = resultado.ToList<TablaDelegados>();
+                    List<TablaDelegados> del = tabla_del.ToList<TablaDelegados>();
+
+                    // Primero se verifica cuál delegado está conectado
+                    for (int i = 0; i < del.Count(); i++)
+                    {
+                        if (del[i].Username.Equals(nombreUsuario))
+                        {
+                            del[i].Conectado = false;
+                            mensaje = "El delegado cerró sesión.";
+                            break;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            // Se elimina el delegado que inició sesión de la tabla "Delegado conectado"
+            try
+            {
+                using (var db = new SQLiteConnection(directorioBD))
+                {
+                    var resultado = db.Table<TablaDelegadoConectado>();
+                    IEnumerable<TablaDelegadoConectado> tabla_delCo = resultado.ToList<TablaDelegadoConectado>();
+                    List<TablaDelegadoConectado> delCo = tabla_delCo.ToList<TablaDelegadoConectado>();
+
+                    db.Delete(delCo[0]);
+                    mensaje += " Se eliminó el delegado conetado.";
+
+                    // Para permitir pruebas, se eliminan todas las acciones que realizó el delegado durante su sesión. 
+                    // Esto no debería aparecer en una versión de producción.
+
+                    // Eliminar todos los delegados conectados
+                    db.DeleteAll<TablaDelegadoConectado>();
+
+                    // Eliminar todos los reportes de finalización de partidos
+                    db.DeleteAll<TablaFinPartido>();
+
+                    // Vaciar la tabla de ocurrencias
+                    db.DeleteAll<TablaOcurrencias>();
+
+                    // Vaciar la tabla de resultados parciales
+                    db.DeleteAll<TablaResultadosParciales>();
+
+                    // Marcar todos los partidos como "no iniciados".
+                    var partidos = db.Table<TablaPartidos>().ToList();
+                    partidos.ForEach(p => p.ComienzoPartido = false);
+                    db.UpdateAll(partidos);
+                }
+            }
+            catch (Exception ex)
+            {
+                //Console.WriteLine(ex.Message);
+                mensaje += " Problemas a la hora de cerrar sesión.";
+            }
+            return mensaje;
+        }
+
+        // Este método es básicamente un parche para un bug que causa que un delegado no pueda iniciar sesión 
+        // después de haber salido de la aplicación sin antes cerrar sesión. Esta función miembro determina si 
+        // la sesión del delegado sigue activa. En tal caso, será posible saltar el inicio de sesión.
+        public bool Conectado()
+        {
+            try
+            {
+                using (var db = new SQLiteConnection(directorioBD))
+                {
+                    // Se obtiene una lista de los delegados conectados (de hecho, no puede haber más de uno).
+                    var delegadosConectados = db.Table<TablaDelegadoConectado>().ToList();
+
+                    if (delegadosConectados.Count() > 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+            }
+
+            return false;
         }
     }
 }

@@ -64,5 +64,7 @@ namespace DelegadoDeCampo.Modelo.Tablas
         public int idEquipoB { get; set; }
         [MaxLength(25)]
         public string NombreEquipoB { get; set; }
+
+        public int idPartido { get; set; }
     }
 }

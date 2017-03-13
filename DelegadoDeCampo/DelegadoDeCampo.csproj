@@ -77,11 +77,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Modelo\ComunicacionRemota\Conexion.cs" />
-    <Compile Include="Modelo\GestionEstadoPartido\DatosPartido.cs" />
-    <Compile Include="Modelo\GestionEstadoPartido\Equipo.cs" />
     <Compile Include="Modelo\GestionEstadoPartido\Jugadores.cs" />
-    <Compile Include="Modelo\GestionEstadoPartido\EstadoPartido.cs" />
     <Compile Include="Modelo\Tablas\TablaDelegadoConectado.cs" />
     <Compile Include="Modelo\Tablas\TablaEquipoA.cs" />
     <Compile Include="Modelo\Tablas\TablaEquipoB.cs" />

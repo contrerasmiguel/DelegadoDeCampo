@@ -56,13 +56,27 @@ namespace DelegadoDeCampo.Modelo.GestionOcurrencias
         string MinutosRojasB = string.Empty;
         string CamisetasRojasB = string.Empty;
 
-        public ReporteOcurrencia()
+        static ReporteOcurrencia instancia = null;
+
+        public static ReporteOcurrencia Instancia
+        {
+            get
+            {
+                if (instancia == null)
+                {
+                    instancia = new ReporteOcurrencia();
+                }
+
+                return instancia;
+            }
+        }
+
+        private ReporteOcurrencia()
         {
             var docsFolder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
             directorioBD = System.IO.Path.Combine(docsFolder, "db_adonet.db");
             strConexión = string.Format("Data Source={0};Version=3;", directorioBD);
         }
-
 
         public int PuntuacionEquipoA()
         {
@@ -277,6 +291,39 @@ namespace DelegadoDeCampo.Modelo.GestionOcurrencias
             return int.MinValue;
         }
 
+        // Determina si el delegado reportó el inicio del partido previamente.
+        public bool PartidoIniciado()
+        {
+            // Se obtiene el partido al que fue asignado el delegado.
+            int id = ObtenerPartidoDelegado();
+
+            // Si el partido fue encontrado, id será diferente de int.MinValue.
+            if (id != int.MinValue)
+            {
+                try
+                {
+                    using (var db = new SQLiteConnection(directorioBD))
+                    {
+                        // Se busca todos los partidos cuyo ID sea el que fue asignado al delegado.
+                        var partidos = db.Table<TablaPartidos>().ToList().Where(p => p.idPartido == id);
+
+                        if (partidos.Count() > 0)
+                        {
+                            // De encontrar alguno, retornar si se reportó el inicio de ese partido.
+                            return partidos.First().ComienzoPartido;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine(ex.Message);
+                }
+            }
+
+            // De ocurrir algún error, retornar que no se reportó el inicio del partido actual.
+            return false;
+        }
+
         public bool ReportarInicioPartido()
         {
             // Se obtiene el id del partido asignado al delegado conectado
@@ -353,6 +400,7 @@ namespace DelegadoDeCampo.Modelo.GestionOcurrencias
                     to.idEquipoJug = id;
                     to.NombreEquiJug = nombreA;
                     to.MinutoOcu = 0;
+                    to.idPartido = ObtenerPartidoDelegado();
                     db.Insert(to);
                     mensaje = "Se almacenó la información momentánea A.";
                 }
@@ -407,6 +455,7 @@ namespace DelegadoDeCampo.Modelo.GestionOcurrencias
                     to.idEquipoJug = id;
                     to.NombreEquiJug = nombreB;
                     to.MinutoOcu = 0;
+                    to.idPartido = ObtenerPartidoDelegado();
                     db.Insert(to);
                     mensaje = "Se almacenó la información momentánea B.";
                 }
@@ -509,92 +558,6 @@ namespace DelegadoDeCampo.Modelo.GestionOcurrencias
             return string.Empty;
         }
 
-
-        public void ReportarGol(int idJugador, int idEquipo, int minuto)
-        {
-
-        }
-
-        public void ReportarAmarilla(int idJugador, int idEquipo, int minuto)
-        {
-
-        }
-
-        public void ReportarRoja(int idJugador, int idEquipo, int minuto)
-        {
-
-        }
-
-
-        public string CerrarSesion()
-        {
-            // Se obtiene, primeramente, el nombre de usuario del delegado conectado que está asignado al partido
-            string nombreUsuario = string.Empty;
-            try
-            {
-                using (var db = new SQLiteConnection(directorioBD))
-                {
-                    var resultado = db.Table<TablaDelegadoConectado>();
-                    IEnumerable<TablaDelegadoConectado> tabla_delCo = resultado.ToList<TablaDelegadoConectado>();
-                    List<TablaDelegadoConectado> delCo = tabla_delCo.ToList<TablaDelegadoConectado>();
-
-                    nombreUsuario = delCo[0].Username;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
-            string mensaje = string.Empty;
-            try
-            {
-                using (var db = new SQLiteConnection(directorioBD))
-                {
-
-                    var resultado = db.Table<TablaDelegados>();
-                    IEnumerable<TablaDelegados> tabla_del = resultado.ToList<TablaDelegados>();
-                    List<TablaDelegados> del = tabla_del.ToList<TablaDelegados>();
-
-                    // Primero se verifica cuál delegado está conectado
-                    for (int i = 0; i < del.Count(); i++)
-                    {
-                        if (del[i].Username.Equals(nombreUsuario))
-                        {
-                            del[i].Conectado = false;
-                            mensaje = "El delegado cerró sesión.";
-                            break;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
-            // Se elimina el delegado que inició sesión de la tabla "Delegado conectado"
-            try
-            {
-                using (var db = new SQLiteConnection(directorioBD))
-                {
-                    var resultado = db.Table<TablaDelegadoConectado>();
-                    IEnumerable<TablaDelegadoConectado> tabla_delCo = resultado.ToList<TablaDelegadoConectado>();
-                    List<TablaDelegadoConectado> delCo = tabla_delCo.ToList<TablaDelegadoConectado>();
-
-                    db.Delete(delCo[0]);
-                    mensaje += " Se eliminó el delegado conetado.";
-                }
-            }
-            catch (Exception ex)
-            {
-                //Console.WriteLine(ex.Message);
-                mensaje += " Problemas a la hora de cerrar sesión.";
-            }
-            return mensaje;
-        }
-
-
         public string ReportarFinalizacionPartido()
         {
             string mensaje = "Hay problemas XS";
@@ -640,6 +603,8 @@ namespace DelegadoDeCampo.Modelo.GestionOcurrencias
 
                     tfp.idEquipoB = resPar[(resPar.Count() - 1)].idEquipoB;
                     tfp.NombreEquipoB = resPar[(resPar.Count() - 1)].NombreEquipoB;
+
+                    tfp.idPartido = ObtenerPartidoDelegado();
 
                     //mensaje = "Se almacenó la tupla en la tabla 'Fin del Partido'";
                 }
@@ -936,6 +901,8 @@ namespace DelegadoDeCampo.Modelo.GestionOcurrencias
 
                     trp.idEquipoB = this.idEquipoB;
                     trp.NombreEquipoB = nombreEquipoB;
+
+                    trp.idPartido = ObtenerPartidoDelegado();
 
                     db.Insert(trp);
                     mensaje += " Se insertó el resultado parcial";

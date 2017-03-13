@@ -68,7 +68,22 @@ namespace DelegadoDeCampo.Modelo.GestionOcurrencias
             }
         }
 
-        public TiempoOcurrencia()
+        static TiempoOcurrencia instancia = null;
+
+        public static TiempoOcurrencia Instancia
+        {
+            get
+            {
+                if (instancia == null)
+                {
+                    instancia = new TiempoOcurrencia();
+                }
+
+                return instancia;
+            }
+        }
+
+        private TiempoOcurrencia()
         {
             var docsFolder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
             directorioBD = System.IO.Path.Combine(docsFolder, "db_adonet.db");
@@ -98,82 +113,6 @@ namespace DelegadoDeCampo.Modelo.GestionOcurrencias
             }
             return false;
         }
-
-
-        public string CerrarSesion()
-        {
-            bool ban = EliminarUltimoJugadorAlmacenado();
-            string mensaje = "No se eliminó el último jugador almacenado en la tabla 'Ocurrencias'.";
-
-            // Si ban es verdadero, se obtiene el nombre del delegado conectado
-            if (ban)
-            {
-                string nombreUsuario = string.Empty;
-                try
-                {
-                    using (var db = new SQLiteConnection(directorioBD))
-                    {
-                        var resultado = db.Table<TablaDelegadoConectado>();
-                        IEnumerable<TablaDelegadoConectado> tabla_delCo = resultado.ToList<TablaDelegadoConectado>();
-                        List<TablaDelegadoConectado> delCo = tabla_delCo.ToList<TablaDelegadoConectado>();
-
-                        nombreUsuario = delCo[(delCo.Count() - 1)].Username;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-
-                // Con ese nombre, se cambia el valor del campo 'Conectado' de ese delegado a falso.
-                try
-                {
-                    using (var db = new SQLiteConnection(directorioBD))
-                    {
-
-                        var resultado = db.Table<TablaDelegados>();
-                        IEnumerable<TablaDelegados> tabla_del = resultado.ToList<TablaDelegados>();
-                        List<TablaDelegados> del = tabla_del.ToList<TablaDelegados>();
-
-                        // Primero se verifica cuál delegado está conectado
-                        for (int i = 0; i < del.Count(); i++)
-                        {
-                            if (del[i].Username.Equals(nombreUsuario))
-                            {
-                                del[i].Conectado = false;
-                                mensaje = "El delegado cerró sesión.";
-                                break;
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-
-                // Se elimina el delegado que inició sesión de la tabla "Delegado conectado"
-                try
-                {
-                    using (var db = new SQLiteConnection(directorioBD))
-                    {
-                        var resultado = db.Table<TablaDelegadoConectado>();
-                        IEnumerable<TablaDelegadoConectado> tabla_delCo = resultado.ToList<TablaDelegadoConectado>();
-                        List<TablaDelegadoConectado> delCo = tabla_delCo.ToList<TablaDelegadoConectado>();
-
-                        db.Delete(delCo[(delCo.Count() - 1)]);
-                        mensaje += " Se eliminó el delegado conetado.";
-                    }
-                }
-                catch (Exception ex)
-                {
-                    //Console.WriteLine(ex.Message);
-                    mensaje += " Problemas a la hora de cerrar sesión.";
-                }
-            }
-            return mensaje;
-        }
-
 
         public bool AlmacenarTiempoJugador(int tiempo)
         {
