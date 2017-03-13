@@ -11,111 +11,60 @@ using Android.Views;
 using Android.Widget;
 
 using DelegadoDeCampo.Modelo.GestionOcurrencias;
-using DelegadoDeCampo.Modelo.GestionEstadoPartido;
+using DelegadoDeCampo.Procesos.ControladorSesionUsuario;
 
 namespace DelegadoDeCampo.Procesos.ControladorOcurrencias
 {
-    [Activity(Label = "DelegadoSeleccionTiempo")]
+    [Activity(Label = "Selección Tiempo", Theme = "@android:style/Theme.NoTitleBar")]
     class ControladorSeleccionTiempo : Activity
     {
         private TiempoOcurrencia tiempo;
         NumberPicker npMinutoDecena;
         NumberPicker npMinutoUnidad;
-        EstadoPartido persistencia;
 
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
             SetContentView(Resource.Layout.IuSeleccionTiempo);
 
-            persistencia = new EstadoPartido(Application);
-
             tiempo = new TiempoOcurrencia();
-
+            FindViewById<Button>(Resource.Id.btnCerrarSesionT).Click += ControladorCerrarSesion_Click;
             npMinutoDecena = FindViewById<NumberPicker>(Resource.Id.npMinutoDecena);
-            npMinutoDecena.MinValue = TiempoOcurrencia.MINIMO;
-            npMinutoDecena.MaxValue = TiempoOcurrencia.MAXIMO_DECENA;
-            npMinutoDecena.ValueChanged += NpMinutoDecena_ValueChanged;
+            npMinutoDecena.MinValue = 0;
+            npMinutoDecena.MaxValue = 20;
+            //npMinutoDecena.ValueChanged += NpMinutoDecena_ValueChanged;
 
             npMinutoUnidad = FindViewById<NumberPicker>(Resource.Id.npMinutoUnidad);
-            npMinutoUnidad.MinValue = TiempoOcurrencia.MINIMO;
-            npMinutoUnidad.MaxValue = TiempoOcurrencia.MAXIMO_UNIDAD;
-            npMinutoUnidad.ValueChanged += NpMinutoUnidad_ValueChanged;
+            npMinutoUnidad.MinValue = 0;
+            npMinutoUnidad.MaxValue = 10;
+            //npMinutoUnidad.ValueChanged += NpMinutoUnidad_ValueChanged;
 
             FindViewById<Button>(Resource.Id.btnSeleccionarTiempo).Click += ControladorSeleccionTiempo_Click;
         }
 
+        private void ControladorCerrarSesion_Click(object sender, EventArgs e)
+        {
+            Toast.MakeText(this, tiempo.CerrarSesion(), ToastLength.Short).Show();
+            var i = new Intent(this, typeof(ControladorInicioSesion));
+            StartActivity(i);
+            Finish();
+        }
+
         private void ControladorSeleccionTiempo_Click(object sender, EventArgs e)
         {
-            var reporte = new ReporteOcurrencia();
-
-            if (persistencia.FinalPartido == 1)
+            Toast.MakeText(this, "Decena = " + npMinutoDecena.Value + " | Unidad = " + npMinutoUnidad.Value, ToastLength.Short).Show();
+            string t = npMinutoDecena.Value + npMinutoUnidad.Value + "";
+            int ti = Int32.Parse(t);
+            bool ban = tiempo.AlmacenarTiempoJugador(ti);
+            if (ban)
             {
-                reporte.ReportarFinalizacionPartido(tiempo.Minuto);
-                Toast.MakeText(ApplicationContext, "Reporte de finalización de partido enviado correctamente.", Android.Widget.ToastLength.Short).Show();
+                Toast.MakeText(this, "Se almacenó el tiempo de la ocurrencia.", ToastLength.Short).Show();
+                var i = new Intent(this, typeof(ControladorEstadoPartido));
+                StartActivity(i);
+                Finish();
             }
-            else if (persistencia.Gol == 1)
-            {
-                reporte.ReportarGol(persistencia.IdJugador, persistencia.IdEquipo, tiempo.Minuto);
-                Toast.MakeText(ApplicationContext, "Reporte de gol enviado correctamente.", Android.Widget.ToastLength.Short).Show();
-
-                if (persistencia.IdEquipo == 0)
-                {
-                    persistencia.GolesA += 1;
-                }
-                else
-                {
-                    persistencia.GolesB += 1;
-                }
-            }
-            else if (persistencia.Amarilla == 1)
-            {
-                reporte.ReportarAmarilla(persistencia.IdJugador, persistencia.IdEquipo, tiempo.Minuto);
-                Toast.MakeText(ApplicationContext, "Reporte de tarjeta amarilla enviado correctamente.", Android.Widget.ToastLength.Short).Show();
-
-                if (persistencia.IdEquipo == 0)
-                {
-                    persistencia.AmarillasA += 1;
-                }
-                else
-                {
-                    persistencia.AmarillasB += 1;
-                }
-            }
-            else if (persistencia.Roja == 1)
-            {
-                reporte.ReportarRoja(persistencia.IdJugador, persistencia.IdEquipo, tiempo.Minuto);
-                Toast.MakeText(ApplicationContext, "Reporte de tarjeta roja enviado correctamente.", Android.Widget.ToastLength.Short).Show();
-
-                if (persistencia.IdEquipo == 0)
-                {
-                    persistencia.RojasA += 1;
-                }
-                else
-                {
-                    persistencia.RojasB += 1;
-                }
-            }
-
-            persistencia.Gol = 0;
-            persistencia.Amarilla = 0;
-            persistencia.Roja = 0;
-
-            persistencia.IdEquipo = -1;
-            persistencia.IdJugador = -1;
-
-            var i = new Intent(this, typeof(ControladorEstadoPartido));
-            StartActivity(i);
-        }
-
-        private void NpMinutoUnidad_ValueChanged(object sender, NumberPicker.ValueChangeEventArgs e)
-        {
-            tiempo.MinutoUnidad = e.NewVal;
-        }
-
-        private void NpMinutoDecena_ValueChanged(object sender, NumberPicker.ValueChangeEventArgs e)
-        {
-            tiempo.MinutoDecena = e.NewVal;
+            else
+                Toast.MakeText(this, "No se almacenó el tiempo de la ocurrencia.", ToastLength.Short).Show();
         }
     }
 }

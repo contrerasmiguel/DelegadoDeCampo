@@ -37,35 +37,35 @@ namespace DelegadoDeCampo.Modelo.GestionEstadoPartido
             equipos[0] = new Equipo("Venezuela");
             equipos[1] = new Equipo("Colombia");
 
-            List<Jugador> jugadoresVenezuela = new List<Jugador>()
+            List<Jugadores> jugadoresVenezuela = new List<Jugadores>()
             {
-                  new Jugador("Pedro", "Johnson", 5),
-                  new Jugador("Juan", "Marmol", 6),
-                  new Jugador("José", "Diesel", 8),
-                  new Jugador("Jesús", "González", 10),
-                  new Jugador("Pablo", "Hill", 18),
-                  new Jugador("Jeremías", "Rosberg", 11),
-                  new Jugador("James", "Cuadrado", 4),
-                  new Jugador("Phil", "Valles", 22),
-                  new Jugador("Junior", "Villaroel", 1),
-                  new Jugador("Tyron", "Villa", 17)
+                  //new Jugadores("Pedro", "Johnson", 5),
+                  //new Jugadores("Juan", "Marmol", 6),
+                  //new Jugadores("José", "Diesel", 8),
+                  //new Jugadores("Jesús", "González", 10),
+                  //new Jugadores("Pablo", "Hill", 18),
+                  //new Jugadores("Jeremías", "Rosberg", 11),
+                  //new Jugadores("James", "Cuadrado", 4),
+                  //new Jugadores("Phil", "Valles", 22),
+                  //new Jugadores("Junior", "Villaroel", 1),
+                  //new Jugadores("Tyron", "Villa", 17)
             };
 
             jugadoresVenezuela.ForEach(j => j.Equipo = equipos[0]);
             jugadoresVenezuela.ForEach(j => equipos[0].Jugadores.Add(j));
 
-            List<Jugador> jugadoresColombia = new List<Jugador>()
+            List<Jugadores> jugadoresColombia = new List<Jugadores>()
             {
-                  new Jugador("Carlos", "Diaz", 1),
-                  new Jugador("Samuel", "López", 3),
-                  new Jugador("Ernesto", "Ramírez", 5),
-                  new Jugador("Alejandro", "Astudillo", 7),
-                  new Jugador("William", "Manrique", 9),
-                  new Jugador("Alfredo", "Graterol", 8),
-                  new Jugador("Fernando", "Sánchez", 6),
-                  new Jugador("Alberto", "Peña", 4),
-                  new Jugador("Domingo", "Ruiz", 2),
-                  new Jugador("Antonio", "Rivas", 12)
+                  //new Jugadores("Carlos", "Diaz", 1),
+                  //new Jugadores("Samuel", "López", 3),
+                  //new Jugadores("Ernesto", "Ramírez", 5),
+                  //new Jugadores("Alejandro", "Astudillo", 7),
+                  //new Jugadores("William", "Manrique", 9),
+                  //new Jugadores("Alfredo", "Graterol", 8),
+                  //new Jugadores("Fernando", "Sánchez", 6),
+                  //new Jugadores("Alberto", "Peña", 4),
+                  //new Jugadores("Domingo", "Ruiz", 2),
+                  //new Jugadores("Antonio", "Rivas", 12)
             };
 
             jugadoresColombia.ForEach(j => j.Equipo = equipos[1]);

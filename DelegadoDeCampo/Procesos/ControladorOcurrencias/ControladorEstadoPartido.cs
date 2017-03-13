@@ -18,40 +18,15 @@ using DelegadoDeCampo.Procesos.ControladorSesionUsuario;
 
 namespace DelegadoDeCampo.Procesos.ControladorOcurrencias
 {
-    [Activity(Label = "DelegadoEstadoPartido")]
+    [Activity(Label = "Estado del Partido", Theme = "@android:style/Theme.NoTitleBar")]
     class ControladorEstadoPartido : Activity
     {
-        private EstadoPartido estadoPartido;
+        //private EstadoPartido estadoPartido;
 
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
             SetContentView(Resource.Layout.IuMenuPrincipal);
-
-            estadoPartido = new EstadoPartido(Application);
-
-            if (estadoPartido.FinalPartido == 1)
-            {
-                FindViewById<Button>(Resource.Id.btnGolA).Enabled = false;
-                FindViewById<Button>(Resource.Id.btnGolB).Enabled = false;
-
-                FindViewById<Button>(Resource.Id.btnAmarillaA).Enabled = false;
-                FindViewById<Button>(Resource.Id.btnAmarillaB).Enabled = false;
-
-                FindViewById<Button>(Resource.Id.btnRojaA).Enabled = false;
-                FindViewById<Button>(Resource.Id.btnRojaB).Enabled = false;
-
-                FindViewById<Button>(Resource.Id.btnFinPartido).Enabled = false;
-            }
-
-            Conexion con = new Conexion();
-            DatosPartido datosPartido = new DatosPartido(con);
-
-            FindViewById<TextView>(Resource.Id.txtPuntuacionEquipoA).Text = estadoPartido.GolesA.ToString();
-            FindViewById<TextView>(Resource.Id.txtPuntuacionEquipoB).Text = estadoPartido.GolesB.ToString();
-
-            FindViewById<TextView>(Resource.Id.txtEquipoA).Text = datosPartido.Equipos[0].Nombre;
-            FindViewById<TextView>(Resource.Id.txtEquipoB).Text = datosPartido.Equipos[1].Nombre;
 
             FindViewById<Button>(Resource.Id.btnGolA).Click += ClickBtnGolA;
             FindViewById<Button>(Resource.Id.btnGolB).Click += ClickBtnGolB;
@@ -65,80 +40,105 @@ namespace DelegadoDeCampo.Procesos.ControladorOcurrencias
             FindViewById<Button>(Resource.Id.btnCerrarSesion).Click += ClickBtnCerrarSesion;
             FindViewById<Button>(Resource.Id.btnFinPartido).Click += ClickBtnFinPartido;
             FindViewById<Button>(Resource.Id.btnResultadosParciales).Click += ClickBtnResultadosParciales;
+
+            FindViewById<TextView>(Resource.Id.txtPuntuacionEquipoA).Text = new ReporteOcurrencia().PuntuacionEquipoA() + "";
+            FindViewById<TextView>(Resource.Id.txtPuntuacionEquipoB).Text = new ReporteOcurrencia().PuntuacionEquipoB() + "";
+
+            FindViewById<TextView>(Resource.Id.txtEquipoA).Text = new ReporteOcurrencia().ObtenerNombreEquipoA();
+            FindViewById<TextView>(Resource.Id.txtEquipoB).Text = new ReporteOcurrencia().ObtenerNombreEquipoB();
         }
 
         private void ClickBtnResultadosParciales(object sender, EventArgs e)
         {
-            new ReporteOcurrencia().EnviarResultadosParciales(estadoPartido);
+            string mensaje = new ReporteOcurrencia().EnviarResultadosParciales();
+            Toast.MakeText(this, mensaje, ToastLength.Short).Show();
             Toast.MakeText(ApplicationContext, "Resultados parciales enviados correctamente.", Android.Widget.ToastLength.Short).Show();
         }
 
         private void ClickBtnFinPartido(object sender, EventArgs e)
         {
-            estadoPartido.FinalPartido = 1;
-            var i = new Intent(this, typeof(ControladorSeleccionTiempo));
-            StartActivity(i);
+            Toast.MakeText(this, new ReporteOcurrencia().ReportarFinalizacionPartido(), ToastLength.Short).Show();
+            FindViewById<Button>(Resource.Id.btnGolA).Enabled = false;
+            FindViewById<Button>(Resource.Id.btnGolB).Enabled = false;
+
+            FindViewById<Button>(Resource.Id.btnAmarillaA).Enabled = false;
+            FindViewById<Button>(Resource.Id.btnAmarillaB).Enabled = false;
+
+            FindViewById<Button>(Resource.Id.btnRojaA).Enabled = false;
+            FindViewById<Button>(Resource.Id.btnRojaB).Enabled = false;
+
+            FindViewById<Button>(Resource.Id.btnFinPartido).Enabled = false;
+            FindViewById<Button>(Resource.Id.btnResultadosParciales).Enabled = false;
+            Toast.MakeText(this, "Inhabilitados botones de Ocurrencias, Información Parcial y Cerrar Sesión", ToastLength.Short).Show();
         }
 
         private void ClickBtnCerrarSesion(object sender, EventArgs e)
         {
-            estadoPartido.Amarilla = 0;
-            estadoPartido.AmarillasA = 0;
-            estadoPartido.AmarillasB = 0;
-            estadoPartido.Gol = 0;
-            estadoPartido.GolesA = 0;
-            estadoPartido.GolesB = 0;
-            estadoPartido.IdEquipo = -1;
-            estadoPartido.IdJugador = -1;
-            estadoPartido.Roja = 0;
-            estadoPartido.RojasA = 0;
-            estadoPartido.RojasB = 0;
-
+            Toast.MakeText(this, new ReporteOcurrencia().CerrarSesion(), ToastLength.Short).Show();
             var i = new Intent(this, typeof(ControladorInicioSesion));
             StartActivity(i);
+            Finish();
         }
 
         private void ClickBtnGolA(object sender, EventArgs e)
         {
-            estadoPartido.Gol = 1;
-            MostrarMenuSeleccionEquipo(0);
+            ReporteOcurrencia ro = new ReporteOcurrencia();
+            int idPartido = ro.ObtenerPartidoDelegado();
+            int idEquipoA = ro.ObtenerIdEquipoA(idPartido);
+            Toast.MakeText(this, ro.InformacionMomentaneaA(idEquipoA, "Gol"), ToastLength.Short).Show();
+            MostrarMenuSeleccionEquipo();
         }
 
         private void ClickBtnGolB(object sender, EventArgs e)
         {
-            estadoPartido.Gol = 1;
-            MostrarMenuSeleccionEquipo(1);
+            ReporteOcurrencia ro = new ReporteOcurrencia();
+            int idPartido = ro.ObtenerPartidoDelegado();
+            int idEquipoB = ro.ObtenerIdEquipoB(idPartido);
+            Toast.MakeText(this, ro.InformacionMomentaneaB(idEquipoB, "Gol"), ToastLength.Short).Show();
+            MostrarMenuSeleccionEquipo();
         }
 
         private void ClickBtnAmarillaA(object sender, EventArgs e)
         {
-            estadoPartido.Amarilla = 1;
-            MostrarMenuSeleccionEquipo(0);
+            ReporteOcurrencia ro = new ReporteOcurrencia();
+            int idPartido = ro.ObtenerPartidoDelegado();
+            int idEquipoA = ro.ObtenerIdEquipoA(idPartido);
+            Toast.MakeText(this, ro.InformacionMomentaneaA(idEquipoA, "Amarilla"), ToastLength.Short).Show();
+            MostrarMenuSeleccionEquipo();
         }
 
         private void ClickBtnAmarillaB(object sender, EventArgs e)
         {
-            estadoPartido.Amarilla = 1;
-            MostrarMenuSeleccionEquipo(1);
+            ReporteOcurrencia ro = new ReporteOcurrencia();
+            int idPartido = ro.ObtenerPartidoDelegado();
+            int idEquipoB = ro.ObtenerIdEquipoB(idPartido);
+            Toast.MakeText(this, ro.InformacionMomentaneaB(idEquipoB, "Amarilla"), ToastLength.Short).Show();
+            MostrarMenuSeleccionEquipo();
         }
 
         private void ClickBtnRojaA(object sender, EventArgs e)
         {
-            estadoPartido.Roja = 1;
-            MostrarMenuSeleccionEquipo(0);
+            ReporteOcurrencia ro = new ReporteOcurrencia();
+            int idPartido = ro.ObtenerPartidoDelegado();
+            int idEquipoA = ro.ObtenerIdEquipoA(idPartido);
+            Toast.MakeText(this, ro.InformacionMomentaneaA(idEquipoA, "Roja"), ToastLength.Short).Show();
+            MostrarMenuSeleccionEquipo();
         }
 
         private void ClickBtnRojaB(object sender, EventArgs e)
         {
-            estadoPartido.Roja = 1;
-            MostrarMenuSeleccionEquipo(1);
+            ReporteOcurrencia ro = new ReporteOcurrencia();
+            int idPartido = ro.ObtenerPartidoDelegado();
+            int idEquipoB = ro.ObtenerIdEquipoB(idPartido);
+            Toast.MakeText(this, ro.InformacionMomentaneaB(idEquipoB, "Roja"), ToastLength.Short).Show();
+            MostrarMenuSeleccionEquipo();
         }
 
-        private void MostrarMenuSeleccionEquipo(int indiceEq)
+        private void MostrarMenuSeleccionEquipo()
         {
-            estadoPartido.IdEquipo = indiceEq;
             var i = new Intent(this, typeof(ControladorSeleccionJugador));
             StartActivity(i);
+            Finish();
         }
     }
 }
